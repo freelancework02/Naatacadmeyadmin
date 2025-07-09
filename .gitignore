@@ -19,6 +19,8 @@ logs
 *.log
 log.txt
 
+dist
+
 # OS files
 Thumbs.db
 ehthumbs.db
