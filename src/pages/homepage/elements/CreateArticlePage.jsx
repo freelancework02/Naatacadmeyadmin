@@ -130,15 +130,15 @@ export default function CreateArticlePage() {
 
   useEffect(() => {
     // Fetch writers
-    axios.get("https://naatacadmey.onrender.com/api/writers").then(res => setWriters(res.data)).catch(() => setWriters([]));
+    axios.get("https://updated-naatacademy.onrender.com//api/writers").then(res => setWriters(res.data)).catch(() => setWriters([]));
     // Fetch categories
-    axios.get("https://naatacadmey.onrender.com/api/categories").then(res => setCategories(res.data)).catch(() => setCategories([]));
+    axios.get("https://updated-naatacademy.onrender.com//api/categories").then(res => setCategories(res.data)).catch(() => setCategories([]));
     // Fetch groups
-    axios.get("https://naatacadmey.onrender.com/api/groups").then(res => setGroups(res.data)).catch(() => setGroups([]));
+    axios.get("https://updated-naatacademy.onrender.com//api/groups").then(res => setGroups(res.data)).catch(() => setGroups([]));
     // Fetch sections
-    axios.get("https://naatacadmey.onrender.com/api/sections").then(res => setSections(res.data)).catch(() => setSections([]));
+    axios.get("https://updated-naatacademy.onrender.com//api/sections").then(res => setSections(res.data)).catch(() => setSections([]));
     // Fetch topics
-    axios.get("https://naatacadmey.onrender.com/api/topics").then(res => setTopics(res.data)).catch(() => setTopics([]));
+    axios.get("https://updated-naatacademy.onrender.com//api/topics").then(res => setTopics(res.data)).catch(() => setTopics([]));
   }, []);
 
 
