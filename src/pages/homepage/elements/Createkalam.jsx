@@ -138,10 +138,10 @@ export default function CreateArticlePage() {
     const fetchData = async () => {
       try {
         const [writersRes, categoriesRes, groupsRes, sectionsRes] = await Promise.all([
-          axios.get("https://naatacadmey.onrender.com/api/writers"),
-          axios.get("https://naatacadmey.onrender.com/api/categories"),
-          axios.get("https://naatacadmey.onrender.com/api/groups"),
-          axios.get("https://naatacadmey.onrender.com/api/sections")
+          axios.get("https://updated-naatacademy.onrender.com/api/writers"),
+          axios.get("https://updated-naatacademy.onrender.com/api/categories"),
+          axios.get("https://updated-naatacademy.onrender.com/api/groups"),
+          axios.get("https://updated-naatacademy.onrender.com/api/sections")
         ]);
 
         setWriters(writersRes.data);
@@ -233,7 +233,7 @@ export default function CreateArticlePage() {
   
       console.log("Payload being sent:", payload);
   
-      const response = await axios.post("https://naatacadmey.onrender.com/api/kalaam", payload);
+      const response = await axios.post("https://updated-naatacademy.onrender.com/api/kalaam", payload);
   
       if (response.data.success) {
         Swal.fire({
