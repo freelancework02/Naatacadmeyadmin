@@ -92,8 +92,8 @@ export default function CreateWriterForm() {
     const fetchData = async () => {
       try {
         const [groupsRes, sectionsRes] = await Promise.all([
-          axios.get('https://naatacadmey.onrender.com/api/groups'),
-          axios.get('https://naatacadmey.onrender.com/api/sections')
+          axios.get('https://updated-naatacademy.onrender.com/api/groups'),
+          axios.get('https://updated-naatacademy.onrender.com/api/sections')
         ]);
         setGroups(groupsRes.data);
         setSections(sectionsRes.data);

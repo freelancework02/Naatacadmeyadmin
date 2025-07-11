@@ -114,10 +114,10 @@ export default function AddBook() {
   ];
 
   useEffect(() => {
-    axios.get("https://naatacadmey.onrender.com/api/writers").then(res => setWriters(res.data)).catch(() => setWriters([]));
-    axios.get("https://naatacadmey.onrender.com/api/categories").then(res => setCategories(res.data)).catch(() => setCategories([]));
-    axios.get("https://naatacadmey.onrender.com/api/groups").then(res => setGroups(res.data)).catch(() => setGroups([]));
-    axios.get("https://naatacadmey.onrender.com/api/sections").then(res => setSections(res.data)).catch(() => setSections([]));
+    axios.get("https://updated-naatacademy.onrender.com/api/writers").then(res => setWriters(res.data)).catch(() => setWriters([]));
+    axios.get("https://updated-naatacademy.onrender.com/api/categories").then(res => setCategories(res.data)).catch(() => setCategories([]));
+    axios.get("https://updated-naatacademy.onrender.com/api/groups").then(res => setGroups(res.data)).catch(() => setGroups([]));
+    axios.get("https://updated-naatacademy.onrender.com/api/sections").then(res => setSections(res.data)).catch(() => setSections([]));
   }, []);
 
   const handleImageUpload = (e) => {

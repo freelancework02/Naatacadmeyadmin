@@ -79,7 +79,7 @@ const App = () => {
         {/* Public Routes */}
         <Route path="/" element={<Dashboard />} />
         <Route path="/addarticle" element={<CreateArticlePage />} />
-        <Route path="topic" element={<AddTopic />} />
+        <Route path="/topic" element={<AddTopic />} />
         <Route path="/section" element={<CreateSection />} />
         <Route path="/sections/edit/:id" element={<EditSection />} />
         <Route path="/group" element={<CreateGroup />} />

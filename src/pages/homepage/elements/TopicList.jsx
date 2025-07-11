@@ -94,7 +94,7 @@ export default function CreateCategory() {
   useEffect(() => {
     const fetchGroups = async () => {
       try {
-        const response = await axios.get("https://naatacadmey.onrender.com/api/groups");
+        const response = await axios.get("https://updated-naatacademy.onrender.com/api/groups");
         // Transform the data to ensure consistent property names
         const transformedGroups = response.data.map(group => ({
           ...group,
