@@ -103,7 +103,7 @@ export default function EditCategory() {
         // Fetch category data and groups in parallel
         const [categoryRes, groupsRes] = await Promise.all([
           axios.get(`https://updated-naatacademy.onrender.com/api/categories/${id}`),
-          axios.get("https://naatacadmey.onrender.com/api/groups")
+          axios.get("https://updated-naatacademy.onrender.com/api/groups")
         ]);
 
         // Transform groups data to ensure consistent property names
@@ -248,7 +248,7 @@ export default function EditCategory() {
               Dashboard
             </Link>
             <span>&gt;</span>
-            <Link to="/categories" className="hover:text-foreground">
+            <Link to="/viewcategory" className="hover:text-foreground">
               Categories
             </Link>
             <span>&gt;</span>
