@@ -26,11 +26,11 @@ export default function EditTopic() {
 
   useEffect(() => {
     // Fetch categories and groups
-    axios.get("https://naatacadmey.onrender.com/api/categories")
+    axios.get("https://updated-naatacademy.onrender.com/api/categories")
       .then(res => setCategories(res.data))
       .catch(() => setCategories([]));
     
-    axios.get("https://naatacadmey.onrender.com/api/groups")
+    axios.get("https://updated-naatacademy.onrender.com/api/groups")
       .then(res => setGroups(res.data))
       .catch(() => setGroups([]));
 

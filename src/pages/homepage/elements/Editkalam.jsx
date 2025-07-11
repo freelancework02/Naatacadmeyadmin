@@ -143,11 +143,11 @@ export default function UpdateKalaamPage() {
         
         // Fetch all reference data in parallel
         const [writersRes, categoriesRes, groupsRes, sectionsRes, kalaamRes] = await Promise.all([
-          axios.get("https://naatacadmey.onrender.com/api/writers"),
-          axios.get("https://naatacadmey.onrender.com/api/categories"),
-          axios.get("https://naatacadmey.onrender.com/api/groups"),
-          axios.get("https://naatacadmey.onrender.com/api/sections"),
-          axios.get(`http://localhost:5000/api/kalaam/${id}`)
+          axios.get("https://updated-naatacademy.onrender.com/api/writers"),
+          axios.get("https://updated-naatacademy.onrender.com/api/categories"),
+          axios.get("https://updated-naatacademy.onrender.com/api/groups"),
+          axios.get("https://updated-naatacademy.onrender.com/api/sections"),
+          axios.get(`https://updated-naatacademy.onrender.com/api/kalaam/${id}`)
         ]);
 
         setWriters(writersRes.data);

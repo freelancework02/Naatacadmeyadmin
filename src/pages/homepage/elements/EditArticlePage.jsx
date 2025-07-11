@@ -314,7 +314,7 @@ export default function EditArticlePage() {
               Dashboard
             </Link>
             <span>&gt;</span>
-            <Link to="/articles" className="hover:text-foreground">
+            <Link to="/viewarticle" className="hover:text-foreground">
               Articles
             </Link>
             <span>&gt;</span>

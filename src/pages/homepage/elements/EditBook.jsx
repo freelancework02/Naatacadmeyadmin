@@ -128,10 +128,10 @@ export default function EditBook() {
         // Fetch book data and reference data in parallel
         const [bookRes, writersRes, categoriesRes, groupsRes, sectionsRes] = await Promise.all([
           axios.get(`https://updated-naatacademy.onrender.com/api/books/${id}`),
-          axios.get("https://naatacadmey.onrender.com/api/writers"),
-          axios.get("https://naatacadmey.onrender.com/api/categories"),
-          axios.get("https://naatacadmey.onrender.com/api/groups"),
-          axios.get("https://naatacadmey.onrender.com/api/sections")
+          axios.get("https://updated-naatacademy.onrender.com/api/writers"),
+          axios.get("https://updated-naatacademy.onrender.com/api/categories"),
+          axios.get("https://updated-naatacademy.onrender.com/api/groups"),
+          axios.get("https://updated-naatacademy.onrender.com/api/sections")
         ]);
 
         const book = bookRes.data;

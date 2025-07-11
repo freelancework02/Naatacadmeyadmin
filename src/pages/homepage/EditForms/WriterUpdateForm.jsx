@@ -99,8 +99,8 @@ export default function EditWriterForm() {
         // Fetch writer data and reference data in parallel
         const [writerRes, groupsRes, sectionsRes] = await Promise.all([
           axios.get(`https://updated-naatacademy.onrender.com/api/writers/${id}`),
-          axios.get('https://naatacadmey.onrender.com/api/groups'),
-          axios.get('https://naatacadmey.onrender.com/api/sections')
+          axios.get('https://updated-naatacademy.onrender.com/api/groups'),
+          axios.get('https://updated-naatacademy.onrender.com/api/sections')
         ]);
 
         const writer = writerRes.data;
