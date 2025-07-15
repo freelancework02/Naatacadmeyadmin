@@ -254,6 +254,8 @@ export default function AddWriter() {
             </select>
           </div>
 
+      
+
           {/* Bio */}
           <div>
             <label className="block font-medium mb-1">Bio</label>

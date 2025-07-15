@@ -105,7 +105,7 @@ export default function CreateArticlePage() {
   const [isFeatured, setIsFeatured] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
 
-  // IDs and Names states (similar to CreateBookPage)
+  // IDs and Names states
   const [writerId, setWriterId] = useState("");
   const [writerName, setWriterName] = useState("");
   const [categoryId, setCategoryId] = useState("");
@@ -132,6 +132,16 @@ export default function CreateArticlePage() {
   const [lineSpacing, setLineSpacing] = useState(2);
 
   const navigate = useNavigate();
+
+  // Extract first line from Post Urdu to use as title if no title is provided
+  useEffect(() => {
+    if (!articleTitle && postUrdu) {
+      const firstLine = postUrdu.split('\n')[0].trim();
+      if (firstLine) {
+        setArticleTitle(firstLine);
+      }
+    }
+  }, [postUrdu, articleTitle]);
 
   // Fetch data from API
   useEffect(() => {
@@ -189,9 +199,12 @@ export default function CreateArticlePage() {
   };
 
   const handleSave = async () => {
+    // Use the first line of Post Urdu as title if no title is provided
+    const finalTitle = articleTitle.trim() || postUrdu.split('\n')[0].trim();
+    
     // Validate required fields
     const requiredFields = {
-      Title: articleTitle.trim(),
+      Title: finalTitle,
       WriterID: writerId,
       CategoryID: categoryId
     };
@@ -213,7 +226,7 @@ export default function CreateArticlePage() {
   
     try {
       const payload = {
-        Title: articleTitle.trim(),
+        Title: finalTitle,
         WriterID: parseInt(writerId),
         WriterName: writerName,
         CategoryID: parseInt(categoryId),
@@ -279,7 +292,6 @@ export default function CreateArticlePage() {
       if (error.response?.data) {
         console.error('Server error details:', error.response.data);
         
-        // Handle missing fields error
         if (error.response.data.missingFields) {
           errorMessage = `Missing required fields: ${error.response.data.missingFields.join(', ')}`;
         } else {
@@ -287,7 +299,6 @@ export default function CreateArticlePage() {
                        `Server error (${error.response.status})`;
         }
 
-        // Handle SQL errors
         if (error.response.data.sqlError) {
           console.error('SQL Error:', error.response.data.sqlError);
           if (error.response.data.sqlError.includes("doesn't exist")) {
@@ -334,7 +345,7 @@ export default function CreateArticlePage() {
                 <Field label="Kalam Title" icon={<Type className="w-4 h-4" />}>
                   <input
                     type="text"
-                    placeholder="Enter title"
+                    placeholder="Enter title (or it will be taken from first line of Post Urdu)"
                     className="border rounded-lg p-2 w-full"
                     value={articleTitle}
                     onChange={(e) => setArticleTitle(e.target.value)}
@@ -392,6 +403,7 @@ export default function CreateArticlePage() {
                       fontSize: "18px"
                     }}
                     disabled={isSubmitting}
+                    placeholder="First line will be used as title if no title is provided"
                   />
                 </Field>
 
@@ -459,22 +471,10 @@ export default function CreateArticlePage() {
                     disabled={isSubmitting}
                   />
                 </Field>
-
-                {/* <Field label="Post Translate" icon={<FileText className="w-4 h-4" />}>
-                  <textarea
-                    value={formatTextWithSpacing(postTranslate)}
-                    onChange={handleTextChange(setPostTranslate)}
-                    cols="30"
-                    rows="10"
-                    className="border w-full p-2 rounded-lg"
-                    style={{ lineHeight: "2" }}
-                    disabled={isSubmitting}
-                  />
-                </Field> */}
               </div>
 
               <div className="space-y-6">
-              <Field label="Category" icon={<Grid className="w-4 h-4" />} required>
+                <Field label="Category" icon={<Grid className="w-4 h-4" />} required>
                   <select
                     className="border rounded-lg p-2 w-full"
                     value={categoryId}

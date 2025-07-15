@@ -76,6 +76,8 @@ export default function CreateWriterForm() {
     SectionID: "",
     SectionName: "",
     Bio: "",
+    wiladat: "",
+    Wisal: "",
     ProfileImageURL: ""
   });
 
@@ -200,6 +202,8 @@ export default function CreateWriterForm() {
           SectionID: "",
           SectionName: "",
           Bio: "",
+          wiladat: "",
+          Wisal: "",
           ProfileImageURL: ""
         });
         setProfilePic(null);
@@ -347,6 +351,36 @@ export default function CreateWriterForm() {
                       <option value="Active">Active</option>
                       <option value="Inactive">Inactive</option>
                     </select>
+                  </div>
+
+                  {/* wiladat Field */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Wiladat
+                    </label>
+                    <input
+                      type="text"
+                      name="wiladat"
+                      value={formData.wiladat}
+                      onChange={handleChange}
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                      placeholder="Enter wiladat date or details"
+                    />
+                  </div>
+
+                  {/* Wisal Field */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Wisal
+                    </label>
+                    <input
+                      type="text"
+                      name="Wisal"
+                      value={formData.Wisal}
+                      onChange={handleChange}
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                      placeholder="Enter wisal date or details"
+                    />
                   </div>
                 </div>
 
