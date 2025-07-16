@@ -1,14 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import Layout from "../../../component/Layout";
-import { Type, FileText, Save, AlertCircle, Upload, Info, ArrowLeft } from "lucide-react";
+import {
+  Type,
+  FileText,
+  Save,
+  AlertCircle,
+  Upload,
+  Info,
+  ArrowLeft,
+  Star,
+} from "lucide-react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-
-// Quill Modules and Formats Configuration
 const modules = {
   toolbar: [
     [{ font: [] }],
@@ -25,21 +32,9 @@ const modules = {
 };
 
 const formats = [
-  "font",
-  "header",
-  "bold",
-  "italic",
-  "underline",
-  "strike",
-  "color",
-  "background",
-  "script",
-  "align",
-  "list",
-  "bullet",
-  "indent",
-  "link",
-  "image",
+  "font", "header", "bold", "italic", "underline", "strike",
+  "color", "background", "script", "align", "list",
+  "bullet", "indent", "link", "image",
 ];
 
 function Field({ label, icon, children, required, helpText }) {
@@ -63,32 +58,34 @@ function Field({ label, icon, children, required, helpText }) {
 export default function EditSection() {
   const { id } = useParams();
   const navigate = useNavigate();
-  
+
   const [sectionName, setSectionName] = useState("");
   const [sectionDescription, setSectionDescription] = useState("");
   const [sectionImage, setSectionImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [existingImage, setExistingImage] = useState(null);
+  const [isFeatured, setIsFeatured] = useState(false);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Fetch section data
+  const API_URL = "https://updated-naatacademy.onrender.com/api/sections";
+
   useEffect(() => {
     const fetchSectionData = async () => {
       try {
-        setIsLoading(true);
-        const response = await axios.get(`https://updated-naatacademy.onrender.com/api/sections/${id}`);
+        const response = await axios.get(`${API_URL}/${id}`);
         const section = response.data;
-        
+
         setSectionName(section.SectionName || "");
         setSectionDescription(section.SectionDescription || "");
-        
+        setIsFeatured(section.isFeatured === 1);
+
         if (section.SectionImageURL) {
           setExistingImage(section.SectionImageURL);
           setImagePreview(section.SectionImageURL);
         }
-        
       } catch (error) {
         console.error("Error fetching section:", error);
         setError("Failed to load section data");
@@ -97,7 +94,7 @@ export default function EditSection() {
           title: "Error",
           text: "Failed to load section data. Please try again.",
         }).then(() => {
-          navigate('/viewsection');
+          navigate("/viewsection");
         });
       } finally {
         setIsLoading(false);
@@ -111,7 +108,7 @@ export default function EditSection() {
     const file = e.target.files[0];
     if (file) {
       setSectionImage(file);
-      setExistingImage(null); // Clear existing image when new one is selected
+      setExistingImage(null);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
@@ -139,19 +136,14 @@ export default function EditSection() {
       const formData = new FormData();
       formData.append("SectionName", sectionName.trim());
       formData.append("SectionDescription", sectionDescription);
+      formData.append("isFeatured", isFeatured ? 1 : 0);
       if (sectionImage) {
         formData.append("image", sectionImage);
       }
 
-      const response = await axios.put(
-        `https://updated-naatacademy.onrender.com/api/sections/${id}`, 
-        formData,
-        {
-          headers: { 
-            "Content-Type": "multipart/form-data"
-          }
-        }
-      );
+      const response = await axios.put(`${API_URL}/${id}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
       if (response.data.success) {
         Swal.fire({
@@ -159,16 +151,19 @@ export default function EditSection() {
           title: "Success",
           text: "Section updated successfully!",
           timer: 2000,
-          showConfirmButton: false
+          showConfirmButton: false,
         }).then(() => {
-          navigate('/viewsection');
+          navigate("/viewsection");
         });
       } else {
         throw new Error(response.data.message || "Failed to update section");
       }
     } catch (error) {
       console.error("Error updating section:", error);
-      const errorMessage = error.response?.data?.message || error.message || "Failed to update section. Please try again.";
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to update section. Please try again.";
       setError(errorMessage);
       Swal.fire({
         icon: "error",
@@ -225,9 +220,7 @@ export default function EditSection() {
                 <h1 className="text-2xl font-bold text-white flex items-center gap-2">
                   <Type className="w-6 h-6" /> Edit Section
                 </h1>
-                <p className="text-blue-100 mt-1">
-                  Update section details
-                </p>
+                <p className="text-blue-100 mt-1">Update section details</p>
               </div>
 
               <form onSubmit={handleSubmit} className="p-6 space-y-6">
@@ -248,7 +241,7 @@ export default function EditSection() {
                     value={sectionName}
                     onChange={(e) => setSectionName(e.target.value)}
                     placeholder="Enter section name"
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                     disabled={isSubmitting}
                   />
                 </Field>
@@ -302,10 +295,27 @@ export default function EditSection() {
                   </div>
                 </Field>
 
+                <Field
+                  label="Featured Section"
+                  icon={<Star className="w-4 h-4" />}
+                  helpText="Toggle this to highlight the section on the homepage or important areas"
+                >
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={isFeatured}
+                      onChange={(e) => setIsFeatured(e.target.checked)}
+                      disabled={isSubmitting}
+                      className="form-checkbox h-5 w-5 text-blue-600"
+                    />
+                    <span className="text-sm">Mark as Featured</span>
+                  </label>
+                </Field>
+
                 <div className="flex justify-end pt-4 gap-4">
                   <button
                     type="button"
-                    onClick={() => navigate('/viewsection')}
+                    onClick={() => navigate("/viewsection")}
                     className="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
                     disabled={isSubmitting}
                   >

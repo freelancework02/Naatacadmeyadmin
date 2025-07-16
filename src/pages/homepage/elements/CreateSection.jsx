@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Layout from "../../../component/Layout";
-import { Type, FileText, Save, AlertCircle, Upload, Info } from "lucide-react";
+import { Type, FileText, Save, AlertCircle, Upload, Info, Star, CheckCircle  } from "lucide-react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import ReactQuill from "react-quill";
@@ -65,6 +65,9 @@ export default function CreateSection() {
   const [sectionImage, setSectionImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isFeatured, setIsFeatured] = useState(false);
+  const [isSelected, setIsSelected] = useState(false);
+
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -84,64 +87,74 @@ export default function CreateSection() {
     e.preventDefault();
 
     if (!sectionName.trim()) {
-        Swal.fire({
-            icon: "warning",
-            title: "Required Field",
-            text: "Section name is required.",
-        });
-        return;
+      Swal.fire({
+        icon: "warning",
+        title: "Required Field",
+        text: "Section name is required.",
+      });
+      return;
     }
 
     setIsSubmitting(true);
     setError("");
 
     try {
-        const formData = new FormData();
-        formData.append("SectionName", sectionName.trim());
-        formData.append("SectionDescription", sectionDescription);
-        if (sectionImage) {
-            formData.append("image", sectionImage);
+      const formData = new FormData();
+      formData.append("SectionName", sectionName.trim());
+      formData.append("SectionDescription", sectionDescription);
+      formData.append("IsFeatured", isFeatured); // or "isFeatured", based on API
+      formData.append("IsSelected", isSelected); // same here
+
+      if (sectionImage) {
+        formData.append("image", sectionImage);
+      }
+
+      // Change the port to 5000
+      const response = await axios.post(
+        "https://updated-naatacademy.onrender.com/api/sections",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
+      );
 
-        // Change the port to 5000
-        const response = await axios.post("https://updated-naatacademy.onrender.com/api/sections", formData, {
-            headers: { 
-                "Content-Type": "multipart/form-data"
-            }
-        });
-
-        if (response.data.success) {
-            Swal.fire({
-                icon: "success",
-                title: "Success",
-                text: "Section created successfully!",
-                timer: 2000,
-                showConfirmButton: false
-            });
-
-            setSectionName("");
-            setSectionDescription("");
-            setSectionImage(null);
-            setImagePreview(null);
-            
-            // Optionally navigate to sections list
-            navigate('/viewsection');
-        } else {
-            throw new Error(response.data.message || "Failed to create section");
-        }
-    } catch (error) {
-        console.error("Error creating section:", error);
-        const errorMessage = error.response?.data?.message || error.message || "Failed to create section. Please try again.";
-        setError(errorMessage);
+      if (response.data.success) {
         Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: errorMessage,
+          icon: "success",
+          title: "Success",
+          text: "Section created successfully!",
+          timer: 2000,
+          showConfirmButton: false,
         });
+
+        setSectionName("");
+        setSectionDescription("");
+        setSectionImage(null);
+        setImagePreview(null);
+
+        // Optionally navigate to sections list
+        navigate("/viewsection");
+      } else {
+        throw new Error(response.data.message || "Failed to create section");
+      }
+    } catch (error) {
+      console.error("Error creating section:", error);
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to create section. Please try again.";
+      setError(errorMessage);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: errorMessage,
+      });
     } finally {
-        setIsSubmitting(false);
+      setIsSubmitting(false);
     }
-};
+  };
 
   return (
     <Layout>
@@ -242,6 +255,33 @@ export default function CreateSection() {
                         />
                       </div>
                     )}
+                  </div>
+                </Field>
+
+                <Field label="Options" icon={<Star className="w-4 h-4" />}>
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={isFeatured}
+                        onChange={(e) => setIsFeatured(e.target.checked)}
+                        disabled={isSubmitting}
+                      />
+                      <span className="flex items-center gap-1">
+                        <Star className="w-4 h-4" /> Featured
+                      </span>
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={(e) => setIsSelected(e.target.checked)}
+                        disabled={isSubmitting}
+                      />
+                      <span className="flex items-center gap-1">
+                        <CheckCircle className="w-4 h-4" /> Selected
+                      </span>
+                    </label>
                   </div>
                 </Field>
 

@@ -7,7 +7,9 @@ import {
   Save,
   AlertCircle,
   Info,
-  Upload
+  Upload,
+  Star,
+  CheckCircle,
 } from "lucide-react";
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -26,17 +28,26 @@ const modules = {
     [{ list: "ordered" }, { list: "bullet" }],
     [{ indent: "-1" }, { indent: "+1" }],
     ["link", "image"],
-    ["clean"]
-  ]
+    ["clean"],
+  ],
 };
 
 const formats = [
-  "font", "header",
-  "bold", "italic", "underline", "strike",
-  "color", "background",
-  "script", "align",
-  "list", "bullet", "indent",
-  "link", "image"
+  "font",
+  "header",
+  "bold",
+  "italic",
+  "underline",
+  "strike",
+  "color",
+  "background",
+  "script",
+  "align",
+  "list",
+  "bullet",
+  "indent",
+  "link",
+  "image",
 ];
 
 // Field Component
@@ -64,6 +75,9 @@ export default function CreateGroup() {
   const [groupImage, setGroupImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isFeatured, setIsFeatured] = useState(false);
+  const [isSelected, setIsSelected] = useState(false);
+
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -84,7 +98,7 @@ export default function CreateGroup() {
       Swal.fire({
         icon: "warning",
         title: "Required Field",
-        text: "Group name is required."
+        text: "Group name is required.",
       });
       return;
     }
@@ -96,13 +110,19 @@ export default function CreateGroup() {
       const formData = new FormData();
       formData.append("GroupName", groupName.trim());
       formData.append("GroupDescription", groupDescription || "");
+      formData.append("IsFeatured", isFeatured); // or "isFeatured", based on API
+      formData.append("IsSelected", isSelected); // same here
       if (groupImage) {
         formData.append("image", groupImage);
       }
 
-      const response = await axios.post("https://updated-naatacademy.onrender.com/api/groups", formData, {
-        headers: { "Content-Type": "multipart/form-data" }
-      });
+      const response = await axios.post(
+        "https://updated-naatacademy.onrender.com/api/groups",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
 
       if (response.data.success) {
         Swal.fire({
@@ -110,12 +130,14 @@ export default function CreateGroup() {
           title: "Success",
           text: "Group created successfully!",
           timer: 2000,
-          showConfirmButton: false
+          showConfirmButton: false,
         });
 
         // Reset form
         setGroupName("");
         setGroupDescription("");
+        setIsFeatured("");
+        setIsSelected("")
         setGroupImage(null);
         setImagePreview(null);
       } else {
@@ -123,7 +145,9 @@ export default function CreateGroup() {
       }
     } catch (err) {
       console.error("Error creating group:", err);
-      const errMsg = err.response?.data?.message || "Failed to create group. Please try again.";
+      const errMsg =
+        err.response?.data?.message ||
+        "Failed to create group. Please try again.";
       setError(errMsg);
       Swal.fire({ icon: "error", title: "Error", text: errMsg });
     } finally {
@@ -146,9 +170,13 @@ export default function CreateGroup() {
 
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
-            <Link to="/dashboard" className="hover:text-foreground">Dashboard</Link>
+            <Link to="/dashboard" className="hover:text-foreground">
+              Dashboard
+            </Link>
             <span>&gt;</span>
-            <Link to="/groups" className="hover:text-foreground">Groups</Link>
+            <Link to="/groups" className="hover:text-foreground">
+              Groups
+            </Link>
             <span>&gt;</span>
             <span className="text-foreground">Create Group</span>
           </nav>
@@ -161,7 +189,9 @@ export default function CreateGroup() {
                   <Users className="w-6 h-6" />
                   Create New Group
                 </h1>
-                <p className="text-purple-100 mt-1">Create a new group to organize your content</p>
+                <p className="text-purple-100 mt-1">
+                  Create a new group to organize your content
+                </p>
               </div>
 
               <form onSubmit={handleSubmit} className="p-6 space-y-6">
@@ -231,6 +261,32 @@ export default function CreateGroup() {
                   </div>
                 </Field>
 
+                <Field label="Options" icon={<Star className="w-4 h-4" />}>
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={isFeatured}
+                        onChange={(e) => setIsFeatured(e.target.checked)}
+                        disabled={isSubmitting}
+                      />
+                      <span className="flex items-center gap-1">
+                        <Star className="w-4 h-4" /> Featured
+                      </span>
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={(e) => setIsSelected(e.target.checked)}
+                        disabled={isSubmitting}
+                      />
+                      <span className="flex items-center gap-1">
+                        <CheckCircle className="w-4 h-4" /> Selected
+                      </span>
+                    </label>
+                  </div>
+                </Field>
                 <div className="flex justify-end pt-4">
                   <button
                     type="submit"
