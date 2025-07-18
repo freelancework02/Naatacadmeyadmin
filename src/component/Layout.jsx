@@ -1,20 +1,26 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 // import { useAuth } from "./AuthContext";
-import { Menu, X, FileText, BookMarked, PenLine, LayoutDashboard  } from 'lucide-react';
-
+import {
+  Menu,
+  X,
+  FileText,
+  BookMarked,
+  PenLine,
+  LayoutDashboard,
+} from "lucide-react";
 
 const sidebarLinks = [
-  { label: 'Dashboard', icon: LayoutDashboard, path: '/' },
-  { label: 'View Articles', icon: FileText, path: '/viewarticle' },
-  { label: 'View Kalam', icon: PenLine, path: '/viewkalam' },
-  { label: 'Category', icon: BookMarked, path: '/viewcategory' },
-  { label: 'View Book', icon: BookMarked, path: '/viewbook' },
-  { label: 'Writers', icon: BookMarked, path: '/writers' },
-  { label: 'Section', icon: BookMarked, path: '/viewsection' },
-  { label: 'Group', icon: BookMarked, path: '/viewgroup' },
-  { label: 'View Topics', icon: BookMarked, path: '/viewtopics' },
-  { label: 'Languages', icon: BookMarked, path: '/viewlang' },
+  { label: "Dashboard", icon: LayoutDashboard, path: "/" },
+  { label: "View Articles", icon: FileText, path: "/viewarticle" },
+  { label: "View Kalam", icon: PenLine, path: "/viewkalam" },
+  { label: "Category", icon: BookMarked, path: "/viewcategory" },
+  { label: "View Book", icon: BookMarked, path: "/viewbook" },
+  { label: "Writers", icon: BookMarked, path: "/writers" },
+  { label: "Section", icon: BookMarked, path: "/viewsection" },
+  { label: "Group", icon: BookMarked, path: "/viewgroup" },
+  { label: "View Topics", icon: BookMarked, path: "/viewtopics" },
+  { label: "Languages", icon: BookMarked, path: "/viewlang" },
 ];
 
 const Layout = ({ children }) => {
@@ -27,18 +33,27 @@ const Layout = ({ children }) => {
   // if (loading) return <div className="p-6 text-center">Loading...</div>;
 
   const getCurrentPageTitle = () => {
-    const currentLink = sidebarLinks.find(link => link.path === location.pathname);
+    const currentLink = sidebarLinks.find(
+      (link) => link.path === location.pathname
+    );
     return currentLink ? currentLink.label : "Dashboard";
   };
 
   return (
     <div className="flex h-screen w-screen text-gray-900 overflow-hidden">
       {/* Sidebar */}
-      <aside className={`fixed top-0 left-0 z-30 w-64 bg-white border-r border-gray-200 flex flex-col transform transition-transform duration-300 ease-in-out
-        ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 md:relative md:flex md:h-full overflow-y-auto h-screen`}>
+      <aside
+        className={`fixed top-0 left-0 z-30 w-64 bg-white border-r border-gray-200 flex flex-col transform transition-transform duration-300 ease-in-out
+        ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } md:translate-x-0 md:relative md:flex md:h-full overflow-y-auto h-screen`}
+      >
         <div className="p-6 border-b flex justify-center items-center relative">
           <h2 className="text-xl font-bold">Admin Dashboard</h2>
-          <button onClick={() => setSidebarOpen(false)} className="absolute top-4 right-4 md:hidden">
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="absolute top-4 right-4 md:hidden"
+          >
             <X className="w-5 h-5 text-black" />
           </button>
         </div>
@@ -49,9 +64,10 @@ const Layout = ({ children }) => {
               key={idx}
               onClick={() => navigate(path)}
               className={`flex items-center gap-3 px-6 py-3 text-lg transition-all w-full text-left
-                ${location.pathname === path
-                  ? "bg-[#fefee6] border-r-2 border-[#5c5a00] text-[#5c5a00] font-semibold"
-                  : "text-gray-700 hover:bg-gray-100"
+                ${
+                  location.pathname === path
+                    ? "bg-[#fefee6] border-r-2 border-[#5c5a00] text-[#5c5a00] font-semibold"
+                    : "text-gray-700 hover:bg-gray-100"
                 }
               `}
             >
@@ -66,19 +82,24 @@ const Layout = ({ children }) => {
       <div className="flex flex-col flex-1 overflow-hidden">
         <header className="flex items-center justify-between bg-white border-b px-6 py-4 shadow-sm">
           <div className="flex items-center space-x-3">
-            <button onClick={() => setSidebarOpen(!sidebarOpen)} className="md:hidden">
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="md:hidden"
+            >
               <Menu className="w-6 h-6 text-gray-700" />
             </button>
-            <h3 className="text-xl font-semibold text-gray-700">{getCurrentPageTitle()}</h3>
+            <h3 className="text-xl font-semibold text-gray-700">
+              {getCurrentPageTitle()}
+            </h3>
           </div>
-          
+
           <div className="relative">
             <button
               className="flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg transition-all"
               onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
             >
               <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-medium">
-              O
+                O
               </div>
               <span className="text-sm font-medium">Owais Rizvi</span>
             </button>
@@ -87,7 +108,10 @@ const Layout = ({ children }) => {
               <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10">
                 <button
                   className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-gray-700"
-                  
+                  onClick={() => {
+                    localStorage.removeItem("isLoggedIn");
+                    navigate("/login");
+                  }}
                 >
                   Logout
                 </button>

@@ -1,17 +1,15 @@
+// Login.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { useAuth } from './AuthContext';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { doc, getDoc } from 'firebase/firestore';
-import { db, auth } from '../pages/firebase/firebaseConfig'; // ✅ named modular imports
 
 const Login = () => {
   const [formData, setFormData] = useState({
     username: '',
     password: ''
   });
-  const { login } = useAuth();
+
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -23,51 +21,32 @@ const Login = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    try {
-      await login(formData.username, formData.password);
-      const user = auth.currentUser;
+    // Static credentials
+    const validUsername = 'Owais Rizvi';
+    const validPassword = 'Naatacademy@123';
 
-      if (user) {
-        const userRef = doc(db, 'admins', user.uid);
-        const userSnap = await getDoc(userRef);
-
-        if (userSnap.exists()) {
-          const userData = userSnap.data();
-          const userRole = userData.role;
-
-          Swal.fire({
-            icon: 'success',
-            title: 'Login successful!',
-            showConfirmButton: false,
-            timer: 2000
-          });
-
-          switch (userRole) {
-            case 'superadmin':
-              navigate('/dashboard');
-              break;
-            case 'admin':
-              navigate('/dashboard');
-              break;
-            default:
-              navigate('/dashboard');
-          }
-        } else {
-          throw new Error('No user data found');
-        }
-      } else {
-        throw new Error('User not authenticated');
-      }
-    } catch (error) {
-      console.error('Error logging in:', error);
+    if (
+      formData.username === validUsername &&
+      formData.password === validPassword
+    ) {
+      localStorage.setItem('isLoggedIn', 'true');
 
       Swal.fire({
+        icon: 'success',
+        title: 'Login successful!',
+        showConfirmButton: false,
+        timer: 2000
+      });
+
+      navigate('/dashboard');
+    } else {
+      Swal.fire({
         icon: 'error',
-        title: 'Error logging in',
-        text: error.message,
+        title: 'Invalid credentials',
+        text: 'Please try again.',
         showConfirmButton: false,
         timer: 2000
       });
@@ -88,8 +67,8 @@ const Login = () => {
           />
         </div>
         <h2 className="text-2xl font-bold mb-2 text-center">Welcome, User!</h2>
-
         <p className="text-gray-600 mb-6 text-center">Please log in</p>
+
         <input
           type="text"
           name="username"
@@ -99,6 +78,7 @@ const Login = () => {
           required
           className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
+
         <div className="relative">
           <input
             type={showPassword ? 'text' : 'password'}
