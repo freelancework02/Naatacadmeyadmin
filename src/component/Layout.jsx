@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 
 const sidebarLinks = [
-  { label: "Dashboard", icon: LayoutDashboard, path: "/" },
+  { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
   { label: "View Articles", icon: FileText, path: "/viewarticle" },
   { label: "View Kalam", icon: PenLine, path: "/viewkalam" },
   { label: "Category", icon: BookMarked, path: "/viewcategory" },
