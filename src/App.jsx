@@ -70,10 +70,11 @@ const App = () => {
 
         {/* Public Route: Login */}
         <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
 
         {/* Protected Routes */}
         <Route
-          path="*"
+          path="*"git 
           element={
             <ProtectedRoute>
               <Routes>
