@@ -115,6 +115,13 @@ export default function CreateArticlePage() {
   const [sectionId, setSectionId] = useState("");
   const [sectionName, setSectionName] = useState("");
 
+  // Section positions states
+  const [sectionOne, setSectionOne] = useState(false);
+  const [sectionTwo, setSectionTwo] = useState(false);
+  const [sectionThree, setSectionThree] = useState(false);
+  const [sectionFour, setSectionFour] = useState(false);
+  const [sectionFive, setSectionFive] = useState(false);
+
   // Data states
   const [writers, setWriters] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -241,12 +248,17 @@ export default function CreateArticlePage() {
         SectionName: sectionName,
         IsFeatured: isFeatured ? 1 : 0,
         IsSelected: isSelected ? 1 : 0,
-        IsDeleted: 0
+        IsDeleted: 0,
+        sectionone: sectionOne ? 1 : null,
+        sectiontwo: sectionTwo ? 1 : null,
+        sectionthree: sectionThree ? 1 : null,
+        sectionfour: sectionFour ? 1 : null,
+        sectionfive: sectionFive ? 1 : null
       };
   
       console.log("Payload being sent:", payload);
   
-      const response = await axios.post("https://updated-naatacademy.onrender.com/api/kalaam", payload);
+      const response = await axios.post("http://localhost:5000/api/kalaam", payload);
   
       if (response.data.success) {
         Swal.fire({
@@ -276,6 +288,11 @@ export default function CreateArticlePage() {
         setSectionName("");
         setIsFeatured(false);
         setIsSelected(false);
+        setSectionOne(false);
+        setSectionTwo(false);
+        setSectionThree(false);
+        setSectionFour(false);
+        setSectionFive(false);
         setPublicationDate(getCurrentDate());
 
         setTimeout(() => {
@@ -580,6 +597,56 @@ export default function CreateArticlePage() {
                     required
                     disabled={isSubmitting}
                   />
+                </Field>
+
+                <Field label="Section Positions" icon={<Grid className="w-4 h-4" />}>
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={sectionOne}
+                        onChange={(e) => setSectionOne(e.target.checked)}
+                        disabled={isSubmitting}
+                      />
+                      <span>Section One</span>
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={sectionTwo}
+                        onChange={(e) => setSectionTwo(e.target.checked)}
+                        disabled={isSubmitting}
+                      />
+                      <span>Section Two</span>
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={sectionThree}
+                        onChange={(e) => setSectionThree(e.target.checked)}
+                        disabled={isSubmitting}
+                      />
+                      <span>Section Three</span>
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={sectionFour}
+                        onChange={(e) => setSectionFour(e.target.checked)}
+                        disabled={isSubmitting}
+                      />
+                      <span>Section Four</span>
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={sectionFive}
+                        onChange={(e) => setSectionFive(e.target.checked)}
+                        disabled={isSubmitting}
+                      />
+                      <span>Section Five</span>
+                    </label>
+                  </div>
                 </Field>
 
                 <Field label="Options" icon={<Star className="w-4 h-4" />}>

@@ -122,7 +122,12 @@ export default function UpdateKalaamPage() {
     ContentHindi: "",
     ContentArabic: "",
     ContentSharha: "",
-    ContentTranslate: ""
+    ContentTranslate: "",
+    sectionone: false,
+    sectiontwo: false,
+    sectionthree: false,
+    sectionfour: false,
+    sectionfive: false
   });
   
   const [lineSpacing, setLineSpacing] = useState(2);
@@ -178,7 +183,12 @@ export default function UpdateKalaamPage() {
           ContentHindi: kalaamData.ContentHindi || "",
           ContentArabic: kalaamData.ContentArabic || "",
           ContentSharha: kalaamData.ContentSharha || "",
-          ContentTranslate: kalaamData.ContentTranslate || ""
+          ContentTranslate: kalaamData.ContentTranslate || "",
+          sectionone: kalaamData.sectionone === 1,
+          sectiontwo: kalaamData.sectiontwo === 1,
+          sectionthree: kalaamData.sectionthree === 1,
+          sectionfour: kalaamData.sectionfour === 1,
+          sectionfive: kalaamData.sectionfive === 1
         });
         
       } catch (error) {
@@ -276,12 +286,17 @@ export default function UpdateKalaamPage() {
         IsFeatured: kalaam.IsFeatured ? 1 : 0,
         IsSelected: kalaam.IsSelected ? 1 : 0,
         PublicationDate: kalaam.PublicationDate,
-        Language: kalaam.Language
+        Language: kalaam.Language,
+        sectionone: kalaam.sectionone ? 1 : null,
+        sectiontwo: kalaam.sectiontwo ? 1 : null,
+        sectionthree: kalaam.sectionthree ? 1 : null,
+        sectionfour: kalaam.sectionfour ? 1 : null,
+        sectionfive: kalaam.sectionfive ? 1 : null
       };
   
       console.log("Payload being sent:", payload);
   
-      const response = await axios.put(`https://updated-naatacademy.onrender.com/api/kalaam/${id}`, payload, {
+      const response = await axios.put(`http://localhost:5000/api/kalaam/${id}`, payload, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -608,6 +623,61 @@ export default function UpdateKalaamPage() {
                     required
                     disabled={isSubmitting}
                   />
+                </Field>
+
+                <Field label="Section Positions" icon={<Grid className="w-4 h-4" />}>
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        name="sectionone"
+                        checked={kalaam.sectionone}
+                        onChange={handleInputChange}
+                        disabled={isSubmitting}
+                      />
+                      <span>Section One</span>
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        name="sectiontwo"
+                        checked={kalaam.sectiontwo}
+                        onChange={handleInputChange}
+                        disabled={isSubmitting}
+                      />
+                      <span>Section Two</span>
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        name="sectionthree"
+                        checked={kalaam.sectionthree}
+                        onChange={handleInputChange}
+                        disabled={isSubmitting}
+                      />
+                      <span>Section Three</span>
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        name="sectionfour"
+                        checked={kalaam.sectionfour}
+                        onChange={handleInputChange}
+                        disabled={isSubmitting}
+                      />
+                      <span>Section Four</span>
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        name="sectionfive"
+                        checked={kalaam.sectionfive}
+                        onChange={handleInputChange}
+                        disabled={isSubmitting}
+                      />
+                      <span>Section Five</span>
+                    </label>
+                  </div>
                 </Field>
 
                 <Field label="Options" icon={<Star className="w-4 h-4" />}>

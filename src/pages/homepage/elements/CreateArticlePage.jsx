@@ -10,26 +10,14 @@ import {
   Hash,
   Layers,
   Grid,
+  Check,
 } from "lucide-react";
-// import Layout from "../../../component/Layout";
 import axios from "axios";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Quill from "quill";
 import Swal from "sweetalert2";
 import Layout from '../../../component/Layout'
-
-// import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { db } from "../../firebase/firebaseConfig";
-import {
-  collection,
-  addDoc,
-  getDocs,
-  doc,
-  setDoc,
-  serverTimestamp
-} from "firebase/firestore";
-
 
 // Font registration for Quill
 const Font = Quill.import("formats/font");
@@ -115,6 +103,7 @@ export default function CreateArticlePage() {
   const [sectionId, setSectionId] = useState("");
   const [sectionName, setSectionName] = useState("");
   const [topicName, setTopicName] = useState("");
+  const [topicId, setTopicId] = useState("");
   const [thumbnailURL, setThumbnailURL] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [contentUrdu, setContentUrdu] = useState("");
@@ -125,6 +114,11 @@ export default function CreateArticlePage() {
   const [groups, setGroups] = useState([]);
   const [sections, setSections] = useState([]);
   const [topics, setTopics] = useState([]);
+  const [sectionOne, setSectionOne] = useState(false);
+  const [sectionTwo, setSectionTwo] = useState(false);
+  const [sectionThree, setSectionThree] = useState(false);
+  const [sectionFour, setSectionFour] = useState(false);
+  const [sectionFive, setSectionFive] = useState(false);
   const fileInputRef = useRef();
   const navigate = useNavigate();
 
@@ -141,8 +135,6 @@ export default function CreateArticlePage() {
     axios.get("https://updated-naatacademy.onrender.com/api/topics").then(res => setTopics(res.data)).catch(() => setTopics([]));
   }, []);
 
-
-
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -152,7 +144,7 @@ export default function CreateArticlePage() {
     setThumbnailURL(previewURL);
   };
 
-  const handleSave = async () => {
+  const handleSave = async (isPublish) => {
     try {
       setIsSubmitting(true);
       let finalThumbnailURL = null;
@@ -203,6 +195,9 @@ export default function CreateArticlePage() {
         return;
       }
 
+      // Get selected topic details
+      const selectedTopic = topics.find(topic => topic.Title === topicName);
+      
       // Prepare article data
       const articleData = {
         Title: title,
@@ -218,20 +213,26 @@ export default function CreateArticlePage() {
         SectionID: sectionId ? parseInt(sectionId) : null,
         SectionName: sectionName,
         Topic: topicName,
-        TopicName: topicName, // Added to match backend schema
-        IsDeleted: 0 // Added to match backend schema
+        TopicID: selectedTopic ? selectedTopic.TopicID : null,
+        TopicName: topicName,
+        IsDeleted: 0,
+        sectionone: sectionOne ? 1 : 0,
+        sectiontwo: sectionTwo ? 1 : 0,
+        sectionthree: sectionThree ? 1 : 0,
+        sectionfour: sectionFour ? 1 : 0,
+        sectionfive: sectionFive ? 1 : 0
       };
 
       console.log('Sending article data:', articleData);
 
       // Create article
-      const response = await axios.post('https://updated-naatacademy.onrender.com/api/articles', articleData);
+      const response = await axios.post('http://localhost:5000/api/articles', articleData);
 
       if (response.data.success) {
         Swal.fire({
           icon: "success",
           title: "Success",
-          text: "Article created successfully!",
+          text: `Article ${isPublish ? 'published' : 'saved as draft'} successfully!`,
           timer: 2000
         });
 
@@ -250,6 +251,12 @@ export default function CreateArticlePage() {
         setSectionId("");
         setSectionName("");
         setTopicName("");
+        setTopicId("");
+        setSectionOne(false);
+        setSectionTwo(false);
+        setSectionThree(false);
+        setSectionFour(false);
+        setSectionFive(false);
         
         setTimeout(() => {
           setIsSubmitting(false);
@@ -492,14 +499,15 @@ export default function CreateArticlePage() {
                     ))}
                   </select>
                 </Field>
-                <Field label="Topic" icon={<Hash className="w-4 h-4" />} required>
+                <Field label="Topic" icon={<Hash className="w-4 h-4" />}>
                   <select
                     className="border rounded-lg p-2 w-full"
                     value={topicName}
                     onChange={e => {
                       setTopicName(e.target.value);
+                      const selected = topics.find(t => t.Title === e.target.value);
+                      setTopicId(selected ? selected.TopicID : "");
                     }}
-                    required
                     disabled={isSubmitting}
                   >
                     <option value="">Select Topic</option>
@@ -509,6 +517,62 @@ export default function CreateArticlePage() {
                       </option>
                     ))}
                   </select>
+                </Field>
+
+                {/* Section checkboxes */}
+                <Field label="Include in Sections" icon={<Check className="w-4 h-4" />}>
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={sectionOne}
+                        onChange={(e) => setSectionOne(e.target.checked)}
+                        className="rounded border-gray-300"
+                        disabled={isSubmitting}
+                      />
+                      Section One
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={sectionTwo}
+                        onChange={(e) => setSectionTwo(e.target.checked)}
+                        className="rounded border-gray-300"
+                        disabled={isSubmitting}
+                      />
+                      Section Two
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={sectionThree}
+                        onChange={(e) => setSectionThree(e.target.checked)}
+                        className="rounded border-gray-300"
+                        disabled={isSubmitting}
+                      />
+                      Section Three
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={sectionFour}
+                        onChange={(e) => setSectionFour(e.target.checked)}
+                        className="rounded border-gray-300"
+                        disabled={isSubmitting}
+                      />
+                      Section Four
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={sectionFive}
+                        onChange={(e) => setSectionFive(e.target.checked)}
+                        className="rounded border-gray-300"
+                        disabled={isSubmitting}
+                      />
+                      Section Five
+                    </label>
+                  </div>
                 </Field>
               </div>
             </div>

@@ -10,6 +10,7 @@ import {
   Hash,
   Layers,
   Grid,
+  CheckSquare,
 } from "lucide-react";
 import axios from "axios";
 import ReactQuill from "react-quill";
@@ -110,6 +111,14 @@ export default function EditArticlePage() {
   const [groups, setGroups] = useState([]);
   const [sections, setSections] = useState([]);
   const [topics, setTopics] = useState([]);
+  
+  // Section fields state
+  const [sectionone, setSectionone] = useState(false);
+  const [sectiontwo, setSectiontwo] = useState(false);
+  const [sectionthree, setSectionthree] = useState(false);
+  const [sectionfour, setSectionfour] = useState(false);
+  const [sectionfive, setSectionfive] = useState(false);
+  
   const fileInputRef = useRef();
 
   useEffect(() => {
@@ -137,6 +146,13 @@ export default function EditArticlePage() {
         setContentUrdu(article.ContentUrdu || "");
         setContentEnglish(article.ContentEnglish || "");
         
+        // Set section fields
+        setSectionone(article.sectionone === 1);
+        setSectiontwo(article.sectiontwo === 1);
+        setSectionthree(article.sectionthree === 1);
+        setSectionfour(article.sectionfour === 1);
+        setSectionfive(article.sectionfive === 1);
+        
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching article:', error);
@@ -154,23 +170,23 @@ export default function EditArticlePage() {
     const fetchDropdownData = async () => {
       try {
         // Fetch writers
-        const writersRes = await axios.get("https://naatacadmey.onrender.com/api/writers");
+        const writersRes = await axios.get("https://updated-naatacademy.onrender.com/api/writers");
         setWriters(writersRes.data);
         
         // Fetch categories
-        const categoriesRes = await axios.get("https://naatacadmey.onrender.com/api/categories");
+        const categoriesRes = await axios.get("https://updated-naatacademy.onrender.com/api/categories");
         setCategories(categoriesRes.data);
         
         // Fetch groups
-        const groupsRes = await axios.get("https://naatacadmey.onrender.com/api/groups");
+        const groupsRes = await axios.get("https://updated-naatacademy.onrender.com/api/groups");
         setGroups(groupsRes.data);
         
         // Fetch sections
-        const sectionsRes = await axios.get("https://naatacadmey.onrender.com/api/sections");
+        const sectionsRes = await axios.get("https://updated-naatacademy.onrender.com/api/sections");
         setSections(sectionsRes.data);
         
         // Fetch topics
-        const topicsRes = await axios.get("https://naatacadmey.onrender.com/api/topics");
+        const topicsRes = await axios.get("https://updated-naatacademy.onrender.com/api/topics");
         setTopics(topicsRes.data);
       } catch (error) {
         console.error('Error fetching dropdown data:', error);
@@ -239,7 +255,7 @@ export default function EditArticlePage() {
         WriterName: writerName,
         CategoryID: parseInt(categoryId),
         CategoryName: categoryName,
-        ThumbnailURL: finalThumbnailURL,
+        ThumbnailURL: typeof finalThumbnailURL === 'string' ? finalThumbnailURL : '',
         ContentUrdu: contentUrdu,
         ContentEnglish: contentEnglish,
         GroupID: groupId ? parseInt(groupId) : null,
@@ -247,13 +263,18 @@ export default function EditArticlePage() {
         SectionID: sectionId ? parseInt(sectionId) : null,
         SectionName: sectionName,
         Topic: topicName,
-        TopicName: topicName
+        TopicName: topicName,
+        sectionone: sectionone ? 1 : 0,
+        sectiontwo: sectiontwo ? 1 : 0,
+        sectionthree: sectionthree ? 1 : 0,
+        sectionfour: sectionfour ? 1 : 0,
+        sectionfive: sectionfive ? 1 : 0
       };
 
       console.log('Sending article update data:', articleData);
 
       // Update article
-      const response = await axios.put(`https://updated-naatacademy.onrender.com/api/articles/${id}`, articleData);
+      const response = await axios.put(`http://localhost:5000/api/articles/${id}`, articleData);
 
       if (response.data.success) {
         Swal.fire({
@@ -524,6 +545,62 @@ export default function EditArticlePage() {
                       </option>
                     ))}
                   </select>
+                </Field>
+
+                {/* Section Fields Checkboxes */}
+                <Field label="Sections" icon={<CheckSquare className="w-4 h-4" />}>
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={sectionone}
+                        onChange={(e) => setSectionone(e.target.checked)}
+                        className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        disabled={isSubmitting}
+                      />
+                      <span>Section One</span>
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={sectiontwo}
+                        onChange={(e) => setSectiontwo(e.target.checked)}
+                        className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        disabled={isSubmitting}
+                      />
+                      <span>Section Two</span>
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={sectionthree}
+                        onChange={(e) => setSectionthree(e.target.checked)}
+                        className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        disabled={isSubmitting}
+                      />
+                      <span>Section Three</span>
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={sectionfour}
+                        onChange={(e) => setSectionfour(e.target.checked)}
+                        className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        disabled={isSubmitting}
+                      />
+                      <span>Section Four</span>
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={sectionfive}
+                        onChange={(e) => setSectionfive(e.target.checked)}
+                        className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        disabled={isSubmitting}
+                      />
+                      <span>Section Five</span>
+                    </label>
+                  </div>
                 </Field>
               </div>
             </div>
