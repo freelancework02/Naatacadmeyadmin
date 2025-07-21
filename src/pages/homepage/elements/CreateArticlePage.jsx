@@ -226,7 +226,7 @@ export default function CreateArticlePage() {
       console.log('Sending article data:', articleData);
 
       // Create article
-      const response = await axios.post('http://localhost:5000/api/articles', articleData);
+      const response = await axios.post('https://updated-naatacademy.onrender.com/api/articles', articleData);
 
       if (response.data.success) {
         Swal.fire({

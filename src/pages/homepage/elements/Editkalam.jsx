@@ -296,7 +296,7 @@ export default function UpdateKalaamPage() {
   
       console.log("Payload being sent:", payload);
   
-      const response = await axios.put(`http://localhost:5000/api/kalaam/${id}`, payload, {
+      const response = await axios.put(`https://updated-naatacademy.onrender.com/api/kalaam/${id}`, payload, {
         headers: {
           'Content-Type': 'application/json'
         }

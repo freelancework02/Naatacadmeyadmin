@@ -258,7 +258,7 @@ export default function CreateArticlePage() {
   
       console.log("Payload being sent:", payload);
   
-      const response = await axios.post("http://localhost:5000/api/kalaam", payload);
+      const response = await axios.post("https://updated-naatacademy.onrender.com/api/kalaam", payload);
   
       if (response.data.success) {
         Swal.fire({

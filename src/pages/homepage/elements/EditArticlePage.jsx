@@ -274,7 +274,7 @@ export default function EditArticlePage() {
       console.log('Sending article update data:', articleData);
 
       // Update article
-      const response = await axios.put(`http://localhost:5000/api/articles/${id}`, articleData);
+      const response = await axios.put(`https://updated-naatacademy.onrender.com/api/articles/${id}`, articleData);
 
       if (response.data.success) {
         Swal.fire({
