@@ -21,6 +21,8 @@ const sidebarLinks = [
   { label: "Group", icon: BookMarked, path: "/viewgroup" },
   { label: "View Topics", icon: BookMarked, path: "/viewtopics" },
   { label: "Languages", icon: BookMarked, path: "/viewlang" },
+  { label: "Grouping article", icon: BookMarked, path: "/grparticle" },
+  { label: "Grouping Kalaam", icon: BookMarked, path: "/grpkalaam" },
 ];
 
 const Layout = ({ children }) => {

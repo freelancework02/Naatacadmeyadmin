@@ -62,6 +62,8 @@ import EditCategory from "./pages/homepage/elements/Editcategory";
 import EditSection from "./pages/homepage/elements/EditSection";
 import EditGroup from "./pages/homepage/elements/Editgroup";
 import Dashboard from "./pages/homepage/elements/Dashboard";
+import Groupingarticle from "./pages/homepage/elements/groupingarticle";
+import Groupingkalaam from "./pages/homepage/elements/Groupingkalaam";
 
 const App = () => {
   return (
@@ -79,6 +81,8 @@ const App = () => {
             <ProtectedRoute>
               <Routes>
                 <Route path="/dashboard" element={<Dashboard />} />
+                 <Route path="/grparticle" element={<Groupingarticle />} />
+                 <Route path="/grpkalaam" element={<Groupingkalaam />} />
                 <Route path="/Dashboard" element={<Dashboard />} />
                 <Route path="/newdashboard" element={<NewDashboard />} />
                 <Route path="/addarticle" element={<CreateArticlePage />} />
