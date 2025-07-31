@@ -64,6 +64,7 @@ import EditGroup from "./pages/homepage/elements/Editgroup";
 import Dashboard from "./pages/homepage/elements/Dashboard";
 import Groupingarticle from "./pages/homepage/elements/groupingarticle";
 import Groupingkalaam from "./pages/homepage/elements/Groupingkalaam";
+import BazmeDuroodTable  from './pages/homepage/elements/BazmeDuroodTable'
 
 const App = () => {
   return (
@@ -82,6 +83,7 @@ const App = () => {
               <Routes>
                 <Route path="/dashboard" element={<Dashboard />} />
                  <Route path="/grparticle" element={<Groupingarticle />} />
+                 <Route path="/bazmedurood" element={<BazmeDuroodTable />} />
                  <Route path="/grpkalaam" element={<Groupingkalaam />} />
                 <Route path="/Dashboard" element={<Dashboard />} />
                 <Route path="/newdashboard" element={<NewDashboard />} />

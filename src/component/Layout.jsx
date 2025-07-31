@@ -23,6 +23,7 @@ const sidebarLinks = [
   { label: "Languages", icon: BookMarked, path: "/viewlang" },
   { label: "Grouping article", icon: BookMarked, path: "/grparticle" },
   { label: "Grouping Kalaam", icon: BookMarked, path: "/grpkalaam" },
+  { label: "بزمِ درود", icon: BookMarked, path: "/bazmedurood" },
 ];
 
 const Layout = ({ children }) => {
