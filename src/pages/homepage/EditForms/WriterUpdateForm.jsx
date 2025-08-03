@@ -81,7 +81,8 @@ export default function EditWriterForm() {
     Bio: "",
     wiladat: "",
     Wisal: "",
-    ProfileImageURL: ""
+    ProfileImageURL: "",
+    WriterTypes: []  // Add this line
   });
 
   const [profilePic, setProfilePic] = useState(null);
@@ -129,7 +130,8 @@ export default function EditWriterForm() {
           Bio: writer.Bio || "",
           wiladat: writer.wiladat || "",
           Wisal: writer.Wisal || "",
-          ProfileImageURL: writer.ProfileImageURL || ""
+          ProfileImageURL: writer.ProfileImageURL || "",
+           WriterTypes: writer.WriterTypes ? writer.WriterTypes.split(',') : []  // Add this line
         });
 
         // Set preview if profile image exists
@@ -206,9 +208,14 @@ export default function EditWriterForm() {
     }
 
     const formDataToSend = new FormData();
-    Object.keys(formData).forEach(key => {
-      formDataToSend.append(key, formData[key] || "");
-    });
+   Object.entries(formData).forEach(([key, value]) => {
+  if (key === "WriterTypes") {
+    formDataToSend.append(key, Array.isArray(value) ? value.join(",") : "");
+  } else {
+    formDataToSend.append(key, value || "");
+  }
+});
+
 
     if (profilePic) {
       formDataToSend.append("image", profilePic);
@@ -400,6 +407,40 @@ export default function EditWriterForm() {
                       <option value="Inactive">Inactive</option>
                     </select>
                   </div>
+
+                  <div>
+  <span className="block text-sm font-medium text-gray-700 mb-2">
+    Writer Types
+  </span>
+  <div className="flex space-x-4">
+    {["Poet Writer", "Article Writer", "Book Writer"].map((type) => (
+      <label key={type} className="inline-flex items-center">
+        <input
+          type="checkbox"
+          name="WriterTypes"
+          value={type}
+          checked={formData.WriterTypes.includes(type)}
+          onChange={(e) => {
+            const { checked, value } = e.target;
+            setFormData((prev) => {
+              let newTypes = [...prev.WriterTypes];
+              if (checked) {
+                if (!newTypes.includes(value)) newTypes.push(value);
+              } else {
+                newTypes = newTypes.filter((t) => t !== value);
+              }
+              return { ...prev, WriterTypes: newTypes };
+            });
+          }}
+          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+          disabled={isSubmitting}
+        />
+        <span className="ml-2">{type}</span>
+      </label>
+    ))}
+  </div>
+</div>
+
 
                   {/* wiladat Field */}
                   <div>

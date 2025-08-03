@@ -2,18 +2,24 @@ import React, { useState, useEffect } from "react";
 import { CloudUploadIcon, FileText } from "lucide-react";
 import Layout from "../../../component/Layout";
 import Swal from "sweetalert2";
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-import Quill from 'quill';
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import Quill from "quill";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const Font = Quill.import('formats/font');
+const Font = Quill.import("formats/font");
 Font.whitelist = [
-  'sans-serif', 'serif', 'monospace',
-  'Amiri', 'Rubik-Bold', 'Rubik-Light',
-  'Scheherazade-Regular', 'Scheherazade-Bold',
-  'Aslam', 'Mehr-Nastaliq'
+  "sans-serif",
+  "serif",
+  "monospace",
+  "Amiri",
+  "Rubik-Bold",
+  "Rubik-Light",
+  "Scheherazade-Regular",
+  "Scheherazade-Bold",
+  "Aslam",
+  "Mehr-Nastaliq",
 ];
 
 Quill.register(Font, true);
@@ -23,46 +29,54 @@ const modules = {
     [
       {
         font: [
-          'Amiri',
-          'Rubik-Bold',
-          'Rubik-Light',
-          'Scheherazade-Regular',
-          'Scheherazade-Bold',
-          'Aslam',
-          'Mehr-Nastaliq',
-          'serif',
-          'sans-serif',
-          'monospace'
-        ]
+          "Amiri",
+          "Rubik-Bold",
+          "Rubik-Light",
+          "Scheherazade-Regular",
+          "Scheherazade-Bold",
+          "Aslam",
+          "Mehr-Nastaliq",
+          "serif",
+          "sans-serif",
+          "monospace",
+        ],
       },
-      { size: [] }
+      { size: [] },
     ],
-    ['bold', 'italic', 'underline', 'strike'],
+    ["bold", "italic", "underline", "strike"],
     [{ color: [] }, { background: [] }],
-    [{ script: 'sub' }, { script: 'super' }],
+    [{ script: "sub" }, { script: "super" }],
     [{ header: [1, 2, 3, 4, 5, 6, false] }],
     [{ align: [] }],
-    ['blockquote', 'code-block'],
-    [{ list: 'ordered' }, { list: 'bullet' }],
-    [{ indent: '-1' }, { indent: '+1' }],
-    ['link', 'image', 'video'],
-    ['clean']
-  ]
+    ["blockquote", "code-block"],
+    [{ list: "ordered" }, { list: "bullet" }],
+    [{ indent: "-1" }, { indent: "+1" }],
+    ["link", "image", "video"],
+    ["clean"],
+  ],
 };
 
 const formats = [
-  'font',
-  'size',
-  'bold', 'italic', 'underline', 'strike',
-  'color', 'background',
-  'script',
-  'header',
-  'align',
-  'blockquote', 'code-block',
-  'list', 'bullet',
-  'indent',
-  'link', 'image', 'video',
-  'clean'
+  "font",
+  "size",
+  "bold",
+  "italic",
+  "underline",
+  "strike",
+  "color",
+  "background",
+  "script",
+  "header",
+  "align",
+  "blockquote",
+  "code-block",
+  "list",
+  "bullet",
+  "indent",
+  "link",
+  "image",
+  "video",
+  "clean",
 ];
 
 export default function CreateWriterForm() {
@@ -78,7 +92,8 @@ export default function CreateWriterForm() {
     Bio: "",
     wiladat: "",
     Wisal: "",
-    ProfileImageURL: ""
+    ProfileImageURL: "",
+    WriterTypes: [], // <-- Add this line
   });
 
   const [profilePic, setProfilePic] = useState(null);
@@ -94,20 +109,20 @@ export default function CreateWriterForm() {
     const fetchData = async () => {
       try {
         const [groupsRes, sectionsRes] = await Promise.all([
-          axios.get('https://updated-naatacademy.onrender.com/api/groups'),
-          axios.get('https://updated-naatacademy.onrender.com/api/sections')
+          axios.get("https://updated-naatacademy.onrender.com/api/groups"),
+          axios.get("https://updated-naatacademy.onrender.com/api/sections"),
         ]);
         setGroups(groupsRes.data);
         setSections(sectionsRes.data);
         // Set default languages
         setLanguages([
-          { id: 'urdu', name: 'Urdu' },
-          { id: 'english', name: 'English' },
-          { id: 'arabic', name: 'Arabic' }
+          { id: "urdu", name: "Urdu" },
+          { id: "english", name: "English" },
+          { id: "arabic", name: "Arabic" },
         ]);
       } catch (error) {
-        console.error('Error fetching data:', error);
-        Swal.fire('Error', 'Failed to fetch required data', 'error');
+        console.error("Error fetching data:", error);
+        Swal.fire("Error", "Failed to fetch required data", "error");
       }
     };
     fetchData();
@@ -117,13 +132,17 @@ export default function CreateWriterForm() {
     const file = e.target.files[0];
     if (!file) return;
 
-    if (!file.type.match('image.*')) {
-      Swal.fire('Error', 'Please select an image file (JPEG, PNG, etc.)', 'error');
+    if (!file.type.match("image.*")) {
+      Swal.fire(
+        "Error",
+        "Please select an image file (JPEG, PNG, etc.)",
+        "error"
+      );
       return;
     }
-    
+
     if (file.size > 5 * 1024 * 1024) {
-      Swal.fire('Error', 'Image size should be less than 5MB', 'error');
+      Swal.fire("Error", "Image size should be less than 5MB", "error");
       return;
     }
 
@@ -136,18 +155,18 @@ export default function CreateWriterForm() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => {
+    setFormData((prev) => {
       const updatedData = { ...prev, [name]: value };
-      if (name === 'GroupID') {
-        const selected = groups.find(g => String(g.GroupID) === value);
+      if (name === "GroupID") {
+        const selected = groups.find((g) => String(g.GroupID) === value);
         updatedData.GroupName = selected ? selected.GroupName : "";
       }
-      if (name === 'SectionID') {
-        const selected = sections.find(s => String(s.SectionID) === value);
+      if (name === "SectionID") {
+        const selected = sections.find((s) => String(s.SectionID) === value);
         updatedData.SectionName = selected ? selected.SectionName : "";
       }
-      if (name === 'LanguageID') {
-        const selected = languages.find(l => l.id === value);
+      if (name === "LanguageID") {
+        const selected = languages.find((l) => l.id === value);
         updatedData.LanguageName = selected ? selected.name : "";
       }
       return updatedData;
@@ -158,14 +177,19 @@ export default function CreateWriterForm() {
     e.preventDefault();
 
     if (!formData.Name || !formData.LanguageID) {
-      Swal.fire('Error', 'Please fill in all required fields', 'error');
+      Swal.fire("Error", "Please fill in all required fields", "error");
       return;
     }
 
     const formDataToSend = new FormData();
-    Object.keys(formData).forEach(key => {
-      formDataToSend.append(key, formData[key] || "");
-    });
+   Object.entries(formData).forEach(([key, value]) => {
+  if (key === "WriterTypes") {
+    formDataToSend.append(key, Array.isArray(value) ? value.join(",") : "");
+  } else {
+    formDataToSend.append(key, value || "");
+  }
+});
+
 
     if (profilePic) {
       formDataToSend.append("image", profilePic);
@@ -177,18 +201,18 @@ export default function CreateWriterForm() {
         formDataToSend,
         {
           headers: {
-            'Content-Type': 'multipart/form-data'
-          }
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
 
       if (response.data.success) {
         Swal.fire({
-          icon: 'success',
-          title: 'Writer Created Successfully!',
+          icon: "success",
+          title: "Writer Created Successfully!",
           text: `Writer ID: ${response.data.writerId}`,
           timer: 3000,
-          showConfirmButton: false
+          showConfirmButton: false,
         });
 
         // Reset form
@@ -204,15 +228,15 @@ export default function CreateWriterForm() {
           Bio: "",
           wiladat: "",
           Wisal: "",
-          ProfileImageURL: ""
+          ProfileImageURL: "",
         });
         setProfilePic(null);
         setPreview(null);
       }
     } catch (error) {
       Swal.fire({
-        icon: 'error',
-        title: 'Error!',
+        icon: "error",
+        title: "Error!",
         text: error.response?.data?.message || "Failed to create writer",
       });
     }
@@ -245,7 +269,11 @@ export default function CreateWriterForm() {
                   className="relative border-2 border-dashed border-gray-300 rounded-full w-48 h-48 flex items-center justify-center cursor-pointer overflow-hidden"
                 >
                   {preview ? (
-                    <img src={preview} alt="Preview" className="object-cover w-full h-full" />
+                    <img
+                      src={preview}
+                      alt="Preview"
+                      className="object-cover w-full h-full"
+                    />
                   ) : (
                     <div className="text-center">
                       <CloudUploadIcon className="mx-auto h-12 w-12 text-gray-400" />
@@ -275,7 +303,7 @@ export default function CreateWriterForm() {
                       name="Name"
                       value={formData.Name}
                       onChange={handleChange}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                      className="mt-1 border block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                       required
                     />
                   </div>
@@ -288,11 +316,11 @@ export default function CreateWriterForm() {
                       name="LanguageID"
                       value={formData.LanguageID}
                       onChange={handleChange}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                      className="mt-1 border block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                       required
                     >
                       <option value="">Select Language</option>
-                      {languages.map(lang => (
+                      {languages.map((lang) => (
                         <option key={lang.id} value={lang.id}>
                           {lang.name}
                         </option>
@@ -308,10 +336,10 @@ export default function CreateWriterForm() {
                       name="GroupID"
                       value={formData.GroupID}
                       onChange={handleChange}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                      className="mt-1 block border w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     >
                       <option value="">Select Group</option>
-                      {groups.map(group => (
+                      {groups.map((group) => (
                         <option key={group.GroupID} value={group.GroupID}>
                           {group.GroupName}
                         </option>
@@ -327,11 +355,14 @@ export default function CreateWriterForm() {
                       name="SectionID"
                       value={formData.SectionID}
                       onChange={handleChange}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                      className="mt-1 border block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     >
                       <option value="">Select Section</option>
-                      {sections.map(section => (
-                        <option key={section.SectionID} value={section.SectionID}>
+                      {sections.map((section) => (
+                        <option
+                          key={section.SectionID}
+                          value={section.SectionID}
+                        >
                           {section.SectionName}
                         </option>
                       ))}
@@ -346,11 +377,50 @@ export default function CreateWriterForm() {
                       name="Status"
                       value={formData.Status}
                       onChange={handleChange}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                      className="mt-1 border  block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     >
                       <option value="Active">Active</option>
                       <option value="Inactive">Inactive</option>
                     </select>
+                  </div>
+
+                  <div>
+                    <span className="block text-sm font-medium text-gray-700 mb-2">
+                      Writer Types
+                    </span>
+                    <div className="flex space-x-4">
+                      {["Poet Writer", "Article Writer", "Book Writer"].map(
+                        (type) => (
+                          <label
+                            key={type}
+                            className="inline-flex items-center"
+                          >
+                            <input
+                              type="checkbox"
+                              name="WriterTypes"
+                              value={type}
+                              checked={formData.WriterTypes.includes(type)}
+                              onChange={(e) => {
+                                const { checked, value } = e.target;
+                                setFormData((prev) => {
+                                  let newTypes = [...prev.WriterTypes];
+                                  if (checked) {
+                                    newTypes.push(value);
+                                  } else {
+                                    newTypes = newTypes.filter(
+                                      (t) => t !== value
+                                    );
+                                  }
+                                  return { ...prev, WriterTypes: newTypes };
+                                });
+                              }}
+                              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                            />
+                            <span className="ml-2">{type}</span>
+                          </label>
+                        )
+                      )}
+                    </div>
                   </div>
 
                   {/* wiladat Field */}
@@ -363,7 +433,7 @@ export default function CreateWriterForm() {
                       name="wiladat"
                       value={formData.wiladat}
                       onChange={handleChange}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                      className="mt-1 border block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                       placeholder="Enter wiladat date or details"
                     />
                   </div>
@@ -378,7 +448,7 @@ export default function CreateWriterForm() {
                       name="Wisal"
                       value={formData.Wisal}
                       onChange={handleChange}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                      className="mt-1 border block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                       placeholder="Enter wisal date or details"
                     />
                   </div>
@@ -392,7 +462,9 @@ export default function CreateWriterForm() {
                   <ReactQuill
                     theme="snow"
                     value={formData.Bio}
-                    onChange={(content) => setFormData(prev => ({ ...prev, Bio: content }))}
+                    onChange={(content) =>
+                      setFormData((prev) => ({ ...prev, Bio: content }))
+                    }
                     modules={modules}
                     formats={formats}
                     className="bg-white"
