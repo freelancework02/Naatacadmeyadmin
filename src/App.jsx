@@ -65,6 +65,8 @@ import Dashboard from "./pages/homepage/elements/Dashboard";
 import Groupingarticle from "./pages/homepage/elements/groupingarticle";
 import Groupingkalaam from "./pages/homepage/elements/Groupingkalaam";
 import BazmeDuroodTable  from './pages/homepage/elements/BazmeDuroodTable'
+import  { KalamTable, MazmoonTable } from './pages/homepage/elements/KalamMazmoonTabs'
+
 
 const App = () => {
   return (
@@ -84,6 +86,8 @@ const App = () => {
                 <Route path="/dashboard" element={<Dashboard />} />
                  <Route path="/grparticle" element={<Groupingarticle />} />
                  <Route path="/bazmedurood" element={<BazmeDuroodTable />} />
+                  <Route path="/submission" element={<KalamTable />} />
+                  <Route path="/submission" element={<MazmoonTable />} />
                  <Route path="/grpkalaam" element={<Groupingkalaam />} />
                 <Route path="/Dashboard" element={<Dashboard />} />
                 <Route path="/newdashboard" element={<NewDashboard />} />
