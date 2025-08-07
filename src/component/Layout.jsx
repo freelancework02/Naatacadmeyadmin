@@ -24,7 +24,8 @@ const sidebarLinks = [
   { label: "Grouping article", icon: BookMarked, path: "/grparticle" },
   { label: "Grouping Kalaam", icon: BookMarked, path: "/grpkalaam" },
   { label: "بزمِ درود", icon: BookMarked, path: "/bazmedurood" },
-    { label: "Submissions", icon: BookMarked, path: "/submission" },
+   { label: "Kalaam Submission", icon: BookMarked, path: "/kalamsub" },
+  
 ];
 
 const Layout = ({ children }) => {
