@@ -67,15 +67,18 @@ export default function ViewBookDetail() {
           {book.GroupName && <span>Group: <span className="font-semibold">{book.GroupName}</span></span>}
           {book.SectionName && <span>Section: <span className="font-semibold">{book.SectionName}</span></span>}
         </div>
-        {book.CoverImageURL && (
-          <div className="flex justify-center mb-6">
+        <div className="flex justify-center mb-6">
+          {book.HasCoverImage ? (
             <img
-              src={book.CoverImageURL}
+              src={`https://updated-naatacademy.onrender.com/api/books/${book.BookID}/cover-image`}
               alt={book.Title}
               className="rounded shadow max-h-72 object-contain"
             />
-          </div>
-        )}
+          ) : (
+            <span className="text-gray-400 italic">No cover image available</span>
+          )}
+        </div>
+
         <div className="mb-6">
           <h2 className="text-xl font-semibold mb-2">Description</h2>
           <div className="prose max-w-none border rounded p-4 bg-gray-50" dangerouslySetInnerHTML={{ __html: book.Description || '<em>No description</em>' }} />

@@ -318,7 +318,7 @@ export default function EditBook() {
                   >
                     {coverImageURL ? (
                       <img
-                        src={coverImageURL}
+                        src={`https://updated-naatacademy.onrender.com/api/books/${book.BookID}/cover-image`}
                         alt="Cover Preview"
                         className="w-60 h-60 object-cover rounded-md"
                       />
